@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wolf OS - Login Beta</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(#007bff, #39cdca);
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div id="login-container" class="container">
+        <h2>Login</h2>
+        <p>You will be given an email to gain access to premium if recently purchased.</p>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button onclick="login()">Login</button>
+        <button onclick="window.open('versions.html')">Versions</button>
+        <p class="error" id="error"></p>
+    </div>
+
+    <script>
+        const validCredentials = [
+            { username: "admin", password: "admin123", role: "Premium", redirect: "premium.html" },
+            { username: "wolf", password: "wolf123", role: "WOLFY", redirect: "premium.html" },
+            { username: "free", password: "free123", role: "Free", redirect: "index.html" }
+        ];
+
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const error = document.getElementById("error");
+
+            const user = validCredentials.find(
+                (cred) => cred.username === username && cred.password === password
+            );
+
+            if (user) {
+                sessionStorage.setItem("authenticated", "true");
+                sessionStorage.setItem("role", user.role);
+
+                window.location.href = user.redirect;
+            } else {
+                error.textContent = "Invalid username or password.";
+            }
+        }
+    </script>
+</body>
+</html>

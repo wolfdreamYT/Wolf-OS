@@ -1,0 +1,4 @@
+
+cd ~/wolf-os/
+
+electron app.js

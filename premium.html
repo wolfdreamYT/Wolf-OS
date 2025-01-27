@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wolf OS</title>
+    <link rel="icon" type="image" href="favicon.ico">
+    <script>
+        if (sessionStorage.getItem("authenticated") !== "true") {
+            window.location.href = "login.html";
+        }
+    </script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background-image: url("wallpaper.png");
+            background-size: cover;
+            background-position: top;
+            background-repeat: no-repeat;
+        }
+
+        .desktop {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+            width: 100vw;
+            height: calc(100vh - 50px);
+            align-content: start;
+            overflow-y: auto; 
+        }
+
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            background: #1e1e1e;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .icon {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #CCC;
+            border-radius: 10px;
+            text-align: center;
+            cursor: grab;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+            font-size: 12px;
+            margin: 0 auto;
+        }
+
+        .icon.chrome {
+            background: #FF5722;
+            background-image: url("/assets/icons/chrome.png");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+        }
+
+        .icon.classroom {
+            background: #2196F3;
+            background-image: url("/assets/icons/classroom.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .icon.d2l {
+            background: #8BC34A;
+            background-image: url("/assets/icons/d2l.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .icon.youtube {
+            background: #FF0000;
+            background-image: url("/assets/icons/youtube.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .icon.instagram {
+            background: #E1306C;
+            background-image: url("/assets/icons/instagram.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .icon.facebook {
+            background: #1877F2;
+            background-image: url("/assets/icons/facebook.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .icon.reddit {
+            background: #FF4500;
+            background-image: url("/assets/icons/reddit.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .icon.pinterest {
+            background: #E60023;
+            background-image: url("/assets/icons/pinterest.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .icon.github {
+            background: #333333;
+            background-image: url("/assets/icons/github.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .icon.drive {
+            background: #0F9D58;
+            background-image: url("/assets/icons/drive.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .icon.spotify {
+            background: #1DB954;
+            background-image: url("/assets/icons/spotify.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .icon.canva {
+            background: #00C4CC;
+            background-image: url("/assets/icons/canva.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .icon.linkedin {
+            background: #0077B5;
+            background-image: url("/assets/icons/linkedin.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .icon.amazon {
+            background: #FF9900;
+            background-image: url("/assets/icons/amazon.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .google1 {
+            background: #FF5722;
+            background-image: url("/assets/icons/chrome.png");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            height: 50px;
+            width: 50px;
+            position: absolute;
+            left: 500px;
+        }
+        .classroom1 {
+            background: #FF5722;
+            background-image: url("/assets/icons/classroom.png");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            height: 50px;
+            width: 50px;
+            position: absolute;
+            left: 560px;
+        }
+        .github1 {
+            background: #FF5722;
+            background-image: url("/assets/icons/github.png");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            height: 50px;
+            width: 50px;
+            position: absolute;
+            left: 620px;
+        }
+        .chatgpt1 {
+            background: #FF5722;
+            background-image: url("/assets/icons/chatgpt.png");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            height: 50px;
+            width: 50px;
+            position: absolute;
+            left: 680px;
+        }
+        .drive1 {
+            background: #FF5722;
+            background-image: url("/assets/icons/drive.png");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            height: 50px;
+            width: 50px;
+            position: absolute;
+            left: 750px;
+        }
+        .canva1 {
+            background: #FF5722;
+            background-image: url("/assets/icons/canva.png");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            height: 50px;
+            width: 50px;
+            position: absolute;
+            left: 810px;
+        }
+        .amazon1 {
+            background: #FF5722;
+            background-image: url("/assets/icons/amazon.png");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            height: 50px;
+            width: 50px;
+            position: absolute;
+            left: 870px;
+        }
+        .gmail1 {
+            background: #FF5722;
+            background-image: url("/assets/icons/gmail.png");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            height: 50px;
+            width: 50px;
+            position: absolute;
+            left: 440px;
+        }
+        .docs1 {
+            background: #FF5722;
+            background-image: url("/assets/icons/docs.png");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            height: 50px;
+            width: 50px;
+            position: absolute;
+            left: 930px;
+        }
+        .slides1 {
+            background: #FF5722;
+            background-image: url("/assets/icons/slides.png");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            height: 50px;
+            width: 50px;
+            position: absolute;
+            left: 990px;
+        }
+        .sheets1 {
+            background: #FF5722;
+            background-image: url("/assets/icons/sheets.png");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            height: 50px;
+            width: 50px;
+            position: absolute;
+            left: 1050px;
+        }
+        .gemini1 {
+            background: #FF5722;
+            background-image: url("/assets/icons/gemini.png");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            height: 50px;
+            width: 50px;
+            position: absolute;
+            left: 1110px;
+        }
+        .youtube1 {
+            background: #FF5722;
+            background-image: url("/assets/icons/youtube.png");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            height: 50px;
+            width: 50px;
+            position: absolute;
+            left: 1170px;
+        }
+        .search {
+            position: absolute;
+            width: 400px;
+            height: 40px;
+            left: 500px;
+            bottom: 200px;
+            border-radius: 20px;
+            border-color: #0078D7;
+        }
+        .search-button {
+            position: absolute;
+            width: 100px;
+            height: 45px;
+            left: 820px;
+            bottom: 201px;
+            border-radius: 20px;
+            border-color: #0078D7;
+        }
+        h1 {
+            font-size: 40px;
+            position: absolute;
+            left: 520px;
+            bottom: 250px;
+            font-family: sans-serif;
+            font-style: bold;
+            color: #ffc400;
+        }
+        #start-button {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background-color: #0078D7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #start-menu {
+            display: none;
+            position: fixed;
+            bottom: 50px;
+            left: 10px;
+            width: 250px;
+            background-color: #2D2D30;
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        #start-menu button {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #start-menu button {
+            padding: 10px 15px;
+            border-bottom: 1px solid #3A3A3D;
+            cursor: pointer;
+            width: 150px;
+            background-color: #414141;
+            border: none;
+            color: #00a4d5;
+            font-style: bold;
+            font-size: 15px;
+        }
+
+        #start-menu a:hover {
+            background-color: #414141;
+        }
+
+        #start-menu li ul {
+            display: none;
+            background-color: #414141;
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            top: 0;
+            left: 250px;
+            width: 200px;
+            border-radius: 5px;
+        }
+
+        #start-menu li:hover ul {
+            display: block;
+        }
+        h2 {
+            font-size: 20px;
+            text-align: center;
+        }
+        #clock {
+            font-size: 25px;
+            position: absolute;
+            bottom: 5px;
+            right: 400px;
+            color: #2196F3;
+        }
+        .battery-container {
+            width: 200px;
+            height: 27px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            left: 1075px;
+            top: 5px;
+        }
+        .battery-bar {
+            height: 100%;
+            width: 0;
+            background-color: #76c7c0;
+            transition: width 0.3s;
+        }
+        .battery-percentage {
+            margin-top: 10px;
+            font-size: 18px;
+            color: rgb(62, 13, 154);
+            position: absolute;
+            bottom: 9px;
+            right: 270px;
+            font-style: bold;
+        }
+        #date {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007ffe;
+            position: absolute;
+            bottom: 15px;
+            left: 100px;
+        }
+        .date-button {
+            width: 200px;
+            left: 100px;
+            position: absolute;
+            bottom: 8px;
+            height: 40px;
+            background: transparent;
+            border-radius: 5px;
+            border: none;
+            cursor: grab;
+        }
+        .date-pop {
+            display: none;
+            position: absolute;
+            top: 380px;
+            left: 200px;
+            transform: translate(-50%, 0);
+            width: 320px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: white;
+            z-index: 1000;
+            text-align: center;
+            transition: transform 0.4s ease, bottom 0.4s ease;
+        }
+
+        .date-pop.active {
+            display: block;
+            position: absolute;
+            top: 380px;
+            left: 200px;
+            transform: translate(-50%, 0);
+        }
+
+        .date-pop h2 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+            color: #4CAF50;
+        }
+
+        .date-pop .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            font-size: 14px;
+            background-color: #e6f7ff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .date-pop .calendar div {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #b3e5fc;
+            border-radius: 5px;
+            background-color: #ffffff;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .date-pop .calendar div:hover {
+            background-color: #b3e5fc;
+            color: white;
+            cursor: pointer;
+        }
+
+        .date-pop .calendar .header {
+            font-weight: bold;
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+        }
+        #battery {
+            width: 200px;
+            height: 40px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            position: absolute;
+            right: 200px;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            bottom: 40px;
+        }
+        .control-bar {
+            width: 1464px;
+            height: 40px;
+            position: absolute;
+            top: 0px;
+            background-color: #6a6a6a;
+        }
+        .logout {
+            right: 20px;
+            top: 5px;
+            position: absolute;
+            width: 160px;
+            height: 30px;
+            background-color: #0078D7;
+        }
+        .command {
+            width: 200px;
+            height: 25px;
+            right: 240px;
+            top: 5px;
+            position: absolute;
+        }
+        .commandbutton {
+            width: 60px;
+            height: 31px;
+            position: absolute;
+            right: 190px;
+            top: 5px;
+        }
+        .blocked {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        .context-menu {
+            position: absolute;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+        .context-menu button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            margin: 2px 0;
+        }
+        h3 {
+            position: absolute;
+            right: 550px;
+            top: -55px;
+            font-size: 45px;
+            color: #4f4f4f;
+        }
+    </style>
+</head>
+
+<script>
+    function logout() {
+        window.open("login.html");
+    }
+</script>
+<script src="globe1.js"></script>
+
+<body>
+
+    <div class="control-bar">
+        <button class="logout" onclick="logout()">Logout</button>
+        <div id="clock">
+            <time id="time-display"></time>
+          </div>  
+
+        <div class="battery-container">
+            <div class="battery-bar" id="batteryBar"></div>
+        </div>
+        <div class="battery-percentage" id="batteryPercentage">Loading...</div>  
+          
+        <h3>|</h3>
+    </div>
+
+    <div class="desktop" id="desktop"></div>
+
+    <div class="taskbar">
+        <button id="start-button" onclick="toggleMenu()">Start</button>
+        <button class="google1" onclick="window.open('https://google.com', '_blank')"></button>
+        <button class="classroom1" onclick="window.open('https://classroom.google.com', '_blank')"></button>
+        <button class="github1" onclick="window.open('https://github.com', '_blank')"></button>
+        <button class="chatgpt1" onclick="window.open('https://chatgpt.com', '_blank')"></button>
+        <button class="drive1" onclick="window.open('https://drive.google.com', '_blank')"></button>
+        <button class="canva1" onclick="window.open('https://canva.com', '_blank')"></button>
+        <button class="amazon1" onclick="window.open('https://amazon.com', '_blank')"></button>
+        <button class="gmail1" onclick="window.open('https://gmail.com', '_blank')"></button>
+        <button class="docs1" onclick="window.open('https://docs.google.com', '_blank')"></button>
+        <button class="slides1" onclick="window.open('https://docs.google.com/presentation/', '_blank')"></button>
+        <button class="sheets1" onclick="window.open('https://sheets.google.com', '_blank')"></button>
+        <button class="gemini1" onclick="window.open('https://gemini.google.com/', '_blank')"></button>
+        <button class="youtube1" onclick="window.open('https://youtube.com', '_blank')"></button>
+
+        <div id="date"></div>
+            <button class="date-button" id="dateButton"></button>
+        </div>
+
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="date-pop" id="datePop">
+      <h2>Calendar</h2>
+      <div class="calendar" id="calendar"></div>
+    </div>    
+
+    <div id="start-menu">
+        <hr>
+        <button class="power">Shut Down</button>
+        <br>
+        <hr>
+        <button class="version">Version</button>
+        <br>
+        <hr>
+        <button class="switch">Switch Versions</button>
+        <hr>
+    </div>
+
+    <h1>Search With Google</h1>
+    <form action="https://www.google.com/search" method="GET" target="_blank">
+        <input class="search" type="text" name="q" placeholder="Search with google QuickSearch" required>
+        <button class="search-button" type="submit">Search</button>
+    </form>  
+
+    <script>
+        const batteryIcon = document.getElementById('batteryBar');
+        const popup = document.getElementById('popup');
+        const popupClose = document.getElementById('popup-close');
+
+        batteryIcon.addEventListener('click', () => {
+            popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+        });
+
+        popupClose.addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target !== popup && e.target !== batteryIcon && !popup.contains(e.target)) {
+                popup.style.display = 'none';
+            }
+        });
+    </script>
+
+    <script>
+        const dateButton = document.getElementById('dateButton');
+        const datePop = document.getElementById('datePop');
+        const overlay = document.getElementById('overlay');
+        const calendar = document.getElementById('calendar');
+      
+        dateButton.addEventListener('click', () => {
+          const isHidden = !datePop.classList.contains('active');
+          if (isHidden) {
+            datePop.style.display = 'block'; 
+            setTimeout(() => datePop.classList.add('active'), 10);
+          } else {
+            datePop.classList.remove('active');
+            setTimeout(() => (datePop.style.display = 'none'), 400); 
+          }
+          overlay.style.display = isHidden ? 'block' : 'none';
+        });
+      
+        overlay.addEventListener('click', () => {
+          datePop.classList.remove('active');
+          setTimeout(() => (datePop.style.display = 'none'), 400);
+          overlay.style.display = 'none';
+        });
+      
+        function generateCalendar(year, month) {
+          const daysInMonth = new Date(year, month + 1, 0).getDate();
+          const startDay = new Date(year, month, 1).getDay();
+          const currentDate = new Date();
+      
+          calendar.innerHTML = '';
+      
+          const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+          daysOfWeek.forEach(day => {
+            const header = document.createElement('div');
+            header.textContent = day;
+            header.classList.add('header');
+            calendar.appendChild(header);
+          });
+      
+          for (let i = 0; i < startDay; i++) {
+            const blank = document.createElement('div');
+            calendar.appendChild(blank);
+          }
+      
+          for (let day = 1; day <= daysInMonth; day++) {
+            const dateDiv = document.createElement('div');
+            dateDiv.textContent = day;
+            if (
+              day === currentDate.getDate() &&
+              month === currentDate.getMonth() &&
+              year === currentDate.getFullYear()
+            ) {
+              dateDiv.style.backgroundColor = '#4CAF50';
+              dateDiv.style.color = 'white';
+            }
+            calendar.appendChild(dateDiv);
+          }
+        }
+      
+        const today = new Date();
+        generateCalendar(today.getFullYear(), today.getMonth());
+    </script>
+
+    <script>
+        const desktop = document.getElementById("desktop");
+
+        const appDetails = [
+            { name: "", style: "chrome", url: "https://www.google.com/chrome" },
+            { name: "", style: "classroom", url: "https://classroom.google.com" },
+            { name: "", style: "d2l", url: "https://pdsb.elearningontario.ca/d2l/home" },
+            { name: "", style: "youtube", url: "https://www.youtube.com" }, 
+            { name: "", style: "instagram", url: "https://www.instagram.com" }, 
+            { name: "", style: "facebook", url: "https://www.facebook.com" }, 
+            { name: "", style: "reddit", url: "https://www.reddit.com" }, 
+            { name: "", style: "pinterest", url: "https://www.pinterest.com" }, 
+            { name: "", style: "github", url: "https://github.com" }, 
+            { name: "", style: "drive", url: "https://drive.google.com" }, 
+            { name: "", style: "spotify", url: "https://www.spotify.com" }, 
+            { name: "", style: "canva", url: "https://www.canva.com" },
+            { name: "", style: "linkedin", url: "https://www.linkedin.com" }, 
+            { name: "", style: "amazon", url: "https://www.amazon.com" }, 
+        ];
+
+        const loadAppPositions = () => {
+            const positions = JSON.parse(localStorage.getItem("appPositions")) || {};
+            return positions;
+        };
+
+        const saveAppPositions = (positions) => {
+            localStorage.setItem("appPositions", JSON.stringify(positions));
+        };
+
+        const createApp = ({ name, style, url }, x, y, id) => {
+            const app = document.createElement("div");
+            app.className = `icon ${style}`;
+            app.style.left = `${x}px`;
+            app.style.top = `${y}px`;
+            app.innerHTML = `<span>${name}</span>`;
+            app.dataset.id = id;
+
+            app.addEventListener("click", () => {
+                window.open(url, "_blank");
+            });
+
+            app.addEventListener("mousedown", (e) => {
+                const startX = e.clientX;
+                const startY = e.clientY;
+                const rect = app.getBoundingClientRect();
+                const offsetX = startX - rect.left;
+                const offsetY = startY - rect.top;
+
+                const onMouseMove = (e) => {
+                    app.style.left = `${e.clientX - offsetX}px`;
+                    app.style.top = `${e.clientY - offsetY}px`;
+                };
+
+                const onMouseUp = () => {
+                    const positions = loadAppPositions();
+                    positions[app.dataset.id] = {
+                        x: parseInt(app.style.left),
+                        y: parseInt(app.style.top),
+                    };
+                    saveAppPositions(positions);
+
+                    document.removeEventListener("mousemove", onMouseMove);
+                    document.removeEventListener("mouseup", onMouseUp);
+                };
+
+                document.addEventListener("mousemove", onMouseMove);
+                document.addEventListener("mouseup", onMouseUp);
+            });
+
+            desktop.appendChild(app);
+        };
+
+        const initializeApps = () => {
+            const positions = loadAppPositions();
+            appDetails.forEach((app, index) => {
+                const position = positions[index] || { x: 100 + index * 120, y: 100 };
+                createApp(app, position.x, position.y, index);
+            });
+        };
+
+        initializeApps();
+    </script>
+        <script>
+            function toggleMenu() {
+                const menu = document.getElementById("start-menu");
+                menu.style.display = menu.style.display === "block" ? "none" : "block";
+            }
+    
+            document.addEventListener("click", (event) => {
+                const menu = document.getElementById("start-menu");
+                const button = document.getElementById("start-button");
+                if (menu.style.display === "block" && !menu.contains(event.target) && event.target !== button) {
+                    menu.style.display = "none";
+                }
+            });
+        </script>
+        <script>
+            function updateClock() {
+            const timeDisplay = document.getElementById('time-display');
+            const now = new Date();
+
+            const options = {
+                timeZone: 'America/New_York',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            };
+            const estTime = new Intl.DateTimeFormat('en-US', options).format(now);
+
+            timeDisplay.textContent = estTime;
+            }
+
+            setInterval(updateClock, 1000);
+            updateClock();
+        </script>   
+        <script>
+            async function updateBatteryLevel() {
+            const battery = await navigator.getBattery();
+            const batteryBar = document.getElementById('batteryBar');
+            const batteryPercentage = document.getElementById('batteryPercentage');
+
+            function update() {
+                const level = Math.round(battery.level * 100);
+                batteryBar.style.width = `${level}%`;
+                batteryPercentage.textContent = `${level}%`;
+                batteryBar.style.backgroundColor = level > 50 ? '#76c7c0' : level > 20 ? '#f5a623' : '#e74c3c';
+            }
+
+            update();
+
+            battery.addEventListener('levelchange', update);
+            }
+
+            updateBatteryLevel();
+        </script> 
+        <script>
+            function updateDate() {
+              const options = { 
+                timeZone: "America/New_York", 
+                year: "numeric", 
+                month: "long", 
+                day: "numeric" 
+              };
+              const now = new Date().toLocaleDateString("en-US", options);
+              document.getElementById("date").textContent = now;
+            }
+        
+            updateDate();
+        
+            setInterval(updateDate, 60000);
+         </script>   
+</body>
+</html>
